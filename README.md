@@ -15,6 +15,6 @@ Retains the full merging and branching power of git:
 
 Work with multiple 1git files in the same directory:
 ```
-1git .vimrc status
-1git .bashrc commit -m "changes"
+1git .vimrc commit -m "changes to file in one repo"
+1git .bashrc commit -m "changes to file in another repo"
 ```

@@ -1,0 +1,33 @@
+#!/bin/bash
+set -u
+
+file=$1
+git_command=$2
+
+start="git --git-dir=.1git.$1"
+shift
+shift
+
+eval "$start add ." > /dev/null
+
+case $0 in
+	clone )
+		shift
+		mkdir .1git_tmp
+		eval "git -C .1git_tmp clone $@"
+		if (( "${#files[@/.1git_tmp]}" == 1 )); then
+			mv .1git_tmp/* ./
+			filename=
+		else
+			echo "Repository must have exactly one file."
+		fi
+		mv .1git_tmp 
+	;;
+	* )
+		echo $command_final
+		eval "$command_final"
+		command_final="$start $git_command $@"
+esac
+
+
+
