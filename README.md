@@ -8,6 +8,12 @@ Cleanly track configuration files (such as .vimrc) in separate repositories.
 1git .vimrc push
 ```
 
+Clone brings the file to your current directory:
+
+```
+1git clone git@github.com:my_user/my-repo.git
+```
+
 Retains the full merging and branching power of git:
 ```
 1git .vimrc merge my_feature
