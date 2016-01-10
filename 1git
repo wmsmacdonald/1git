@@ -1,32 +1,35 @@
 #!/bin/bash
 set -u
 
-file=$1
-git_command=$2
 
-start="git --git-dir=.1git.$1"
-shift
-shift
-
-eval "$start add ." > /dev/null
-
-case $0 in
+case $1 in
 	clone )
 		shift
-		mkdir .1git_tmp
-		eval "git -C .1git_tmp clone $@"
-		if (( "${#files[@/.1git_tmp]}" == 1 )); then
-			mv .1git_tmp/* ./
-			filename=
+		echo "git clone $1 .1git_tmp"
+		eval "git clone $1 .1git_tmp"
+		numFiles=$(ls -l .1git_tmp | wc -l)
+		echo $numFiles
+		if [ $numFiles = "2"  ]; then
+			file=$(ls .1git_tmp | head -1)
+			echo "file: $file"
+			eval "mv .1git_tmp/$file ./"
+			eval "mv .1git_tmp/.git ./.1git.$file"
+			eval "echo -e \"*\n!$file\" >> .1git.$file/info/exclude" 
 		else
 			echo "Repository must have exactly one file."
 		fi
-		mv .1git_tmp 
+		rm -rf .1git_tmp
 	;;
 	* )
+		file=$1
+		git_command=$2
+		start="git --git-dir=.1git.$1"
+		shift
+		shift
+		eval "$start add ." > /dev/null
+		command_final="git --git-dir=.1git.$file $git_command $@"
 		echo $command_final
 		eval "$command_final"
-		command_final="$start $git_command $@"
 esac
 
 
